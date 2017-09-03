@@ -21,7 +21,7 @@ SubType.prototype.getSuperValue = function() {
   return false;
 }
 
-//原行链的问题
+//原型链的问题
 var instance1 = new SubType();
 instance1.numbers.push(4); //1,2,3,4
 
