@@ -118,12 +118,11 @@ console.log(Foo.prototype.hasOwnProperty('constructor'));//true
 console.log(Object.prototype.__proto__ === null);//true
 ```
 
-单纯创建一个对象，不用构造函数的话，函数本身只具有`.__proto__`,可以痛过`__proto__`进行继承，prototype在.constructor之后，指向Object.prototype,
+单纯创建一个对象，不用构造函数的话，函数本身只具有`.__proto__`,可以通过`__proto__`进行继承，prototype在.constructor之后，指向Object.prototype,
 
 ```
 var parent = {a:1}
 var child = Object.create(parent);
-child.__proto__ //{a:1}
 parent.__proto__ === parent.constructor.prototype //true
 child.__proto__ === parent //true;
 parent.__proto__ === Object.prototype //true
@@ -169,3 +168,23 @@ console.log(Function.prototype === Function.prototype);//true
 ```
 console.log(Function.prototype.__proto__ === Object.prototype);//true
 ```
+
+### 语法糖类的prototype属性和`__proto__`
+
+大多数浏览器的 ES5 实现之中，每一个对象都有`__proto__`属性，指向对应的构造函数的prototype属性。Class 作为构造函数的语法糖，同时有prototype属性和`__proto__`属性，因此同时存在两条继承链。
+
+- 子类的`__proto__`属性，表示构造函数的继承，总是指向父类
+- 子类的prototype属性的`__proto__`属性，表示方法的继承，总是指向父类的prototype属性
+
+```
+class A {
+}
+
+class B extends A {
+}
+
+B.__proto__ === A // true
+B.prototype.__proto__ === A.prototype // true
+```
+
+这两条继承链，可以这样理解：作为一个对象，子类（B）的原型（**proto**属性）是父类（A）；作为一个构造函数，子类（B）的原型对象（prototype属性）是父类的原型对象（prototype属性）的实例。
