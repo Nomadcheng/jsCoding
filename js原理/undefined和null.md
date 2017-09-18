@@ -68,4 +68,8 @@ Number(null) //0
 
 Number(undefined) //NaN
 5 + undefined //NaN
+
+null == undefined //true
+typeof null; //Object
+typeof undefined; //undefined
 ```
