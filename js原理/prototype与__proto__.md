@@ -2,10 +2,7 @@
 
 ## 概念
 
-```
-function Foo(){};
-var f1 = new Foo;
-```
+原型链的构建是通过将一个类型的实例赋值给另一个构造函数的原型实现的。这样，子类型就能够访问超类型的所有属性和方法，这一点与类的继承很相似。原型链的问题是对象实例共享所有继承的是属性和方法，因此不适宜单独使用。解决这个问题的技术是借用构造函数，即在子类型构造函数的内部调用超类型构造函数。这样就可以做到每个实例都具有自己的属性，同时还能保证只使用构造函数模式来定义类型。
 
 ### 原型对象及prototype
 
@@ -67,6 +64,59 @@ Object.defineProperty( Object.prototype, "__proto__", {
 ```
 
 `__proto__`是可设置属性，之前的代码中使用 ES6 的 Object.setPrototypeOf(..) 进行设 置。然而，通常来说你不需要修改已有对象的 [[Prototype]]。
+
+##### 原型与in操作符
+
+有两种方法使用in操作符，单独使用和在for-in循环中使用。在单独使用时，in操作符会在通过对象能够访问给定属性时返回true，无论该属性存在于实例中还是原型中。
+
+由于in操作符只要通过对象能够访问到属性就返回true，hasOwnProperty（）只在属性存在与实例中时才返回true，因此只要in操作符返回true而hasOwnProperty()返回false，就可以确定属性是原型中的属性。
+
+```
+function Person() {}
+
+Person.prototype = {
+  name: 'Nicholas',
+  age: 29,
+  sayName: function() {
+    console.log(this.name);
+  }
+};
+
+var person1 = new Person();
+
+console.log(person1.hasOwnProperty("name")); //false
+console.log("name" in person1); //true
+console.log(hasPrototypeProperty(person1, "name"));//true;
+person1.name = "Gred";
+console.log(hasPrototypeProperty(person1, "name"));//false
+```
+
+在使用for-in循环时，返回的是所有能够通过对象访问的、可枚举(emumerated)的属性，其中即包括存在于实例中的属性，也包括存在于原型中的属性。屏蔽了原型中不可枚举属性（即将Enumerable标记为false的属性）的实例也会在for-in循环中返回，因此规定，所有开发人员定义的属性都是可枚举的。
+
+要取得对象上所有可枚举的实例属性，可以使用ES5的Object.keys()方法，这个方法接收一个对象作为参数，返回一个包含所有可枚举属性的字符串数组。
+
+```
+function Person() {}
+
+Person.prototype = {
+  name: 'Nicholas',
+  age: 29,
+  sayName: function() {
+    console.log(this.name);
+  }
+};
+
+var person1 = new Person();
+person1.name = "Rob";
+person1.age = 31;
+
+var keys = Object.keys(Person.prototype);
+console.log(keys); //name,age,sayName
+var p1keys = Object.keys(person1);
+console.log(p1keys); //name,age
+```
+
+如果你想得到所有实例属性，无论它是否可枚举，都可以使用Object.getOwnPropertyNames();
 
 ## 说明
 
