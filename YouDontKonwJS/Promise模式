@@ -1,0 +1,57 @@
+> Promise.all([])
+
+```
+//request()是一个Promise-aware Ajax工具
+var p1 = request( "http://some.url.1/" );
+var p2 = request( "http://some.url.2/" );
+Promise.all([p1,p2])
+.then( function(msgs) {
+  // 这里，p1和p2都完成并把它们的消息传入
+  return request(
+    "http://some.url.3/?v=" + msgs.join(",")
+  );
+})
+.then( function(msg) {
+log(msg);
+})
+.then( function fulfilled() {
+
+},
+function rejected(err) {
+
+});
+```
+
+> Promise.race([])
+
+```
+// request(..)是一个支持Promise的Ajax工具
+// 就像我们在本章前面定义的一样
+var p1 = request( "http://some.url.1/" );
+     var p2 = request( "http://some.url.2/" );
+     Promise.race( [p1,p2] )
+     .then( function(msg){
+// p1或者p2将赢得这场竞赛 return request(
+             "http://some.url.3/?v=" + msg
+         );
+})
+.then( function(msg){
+         console.log( msg );
+ });
+```
+超时竞赛
+```
+// 前面定义的timeoutPromise(..)返回一个promise， // 这个promise会在指定延时之后拒绝
+// 为foo()设定超时 Promise.race( [
+    foo(),
+    timeoutPromise( 3000 )
+]) .then(
+// 启动foo() // 给它3秒钟
+ function(){
+// foo(..)按时完成!
+         },
+         function(err){
+// 要么foo()被拒绝，要么只是没能够按时完成，
+// 因此要查看err了解具体原因 }
+);
+```

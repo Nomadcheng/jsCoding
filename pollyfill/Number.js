@@ -18,6 +18,7 @@ if(!Number.isNaN) {
     );
   };
 }
+
 if(!Number.isNaN) {
   Number.isNaN = function(n) {
     return n !== n;

@@ -1,3 +1,4 @@
+// 拉平所有数组
 function panelArr(arr) {
   var newArr = [];
   var isArray = function(obj) {
@@ -12,3 +13,12 @@ function panelArr(arr) {
   return newArr;
 };
 console.log(panelArr([1,[2,3]]));//[1,2,3]
+
+// 只拉平嵌套一层的数组
+function panelArr(arr) {
+  var flat = [];
+  for (var i = 0; i < arr.length; i++) {
+    flat = flat.concat(arr[i]);
+  }
+  return flat;
+};
