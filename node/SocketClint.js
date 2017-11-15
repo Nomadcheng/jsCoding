@@ -1,0 +1,3 @@
+var WebSocket = function(url) {
+
+}
