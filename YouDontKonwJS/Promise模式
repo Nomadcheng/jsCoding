@@ -42,16 +42,52 @@ var p1 = request( "http://some.url.1/" );
 超时竞赛
 ```
 // 前面定义的timeoutPromise(..)返回一个promise， // 这个promise会在指定延时之后拒绝
-// 为foo()设定超时 Promise.race( [
+// 为foo()设定超时
+Promise.race( [
     foo(),
     timeoutPromise( 3000 )
 ]) .then(
 // 启动foo() // 给它3秒钟
  function(){
 // foo(..)按时完成!
-         },
-         function(err){
+ },
+ function(err){
 // 要么foo()被拒绝，要么只是没能够按时完成，
 // 因此要查看err了解具体原因 }
 );
 ```
+我们可以构建一个静态辅助工具来支持查看（而不影响）Promise的决议
+```
+// polyfill安全的guard检查
+if(!Promise.observe) {
+  Promise.observe = function(pr, cb) {
+    //观察pr的决议
+    pr.then(
+      function fufilled(pr, cb) {
+        // 安排异步回调（作为Job）
+        Promise.resolve( msg ).then( cb );
+      },
+      function rejected(err) {
+        Promise.resolve( err ).then( cb );
+      }
+    );
+    // 返回最初的promise
+    return pr;
+  }
+}
+```
+// 下面是如何在前面的超市例子中使用这个工具：
+```
+Promise.race([
+  Promise.observe(
+    foo(),
+    function cleanup(msg) {
+      //在foo之后清理，即使它没有在超时之前完成
+    }
+  ),
+  timeoutPromise( 3000 ) //给它3秒钟
+]);
+```
+这个辅助工具Promise.observe()只是用来展示可以如何查看Promise的完成
+而不对其产生影响。其他的Promise库有自己的解决方案， 不管如何实现，你都很可能遇到需要
+确保Promise不会被意外默默忽略的情况

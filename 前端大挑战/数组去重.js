@@ -39,8 +39,6 @@ Array.prototype.uniq = function () {
 // 然而除了上面这个规定外，我本来想直接用本来想用typeof this[i] === 'object'来解决这个问题，
 // 但是我突然忘了typeof null === 'object'也是成立的，于是又懵逼了好久。
 // 最后我是先判断if(this[i] === null)来先判断object中的null之后再判断{},具体代码如下，如果又更好的实现方法，请告知谢谢
-链接：https://www.nowcoder.com/questionTerminal/0b5ae9c4a8c546f79e2547c0179bfdc2
-来源：牛客网
 
 Array.prototype.uniq = function () {
     var arr =[];
