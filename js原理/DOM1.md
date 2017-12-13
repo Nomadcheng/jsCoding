@@ -18,6 +18,8 @@ function convertToArray(nodes) {
   var array = null;
   try {
     array = Array.prototype.slice.call(nodes, 0); // 针对非IE浏览器
+    array = (...nodes); //ES6中的扩展运算符
+    araay = Array.from(nodes); //ES6中新增的方法
   } catch(ex) {
     array = new Array();
     for (var i = 0; len = nodes.length; i < len; i++) {
