@@ -275,4 +275,80 @@ function* g() {
 run(g);
 ```
 
-上面代码的run函数，就是一个Generator函数的自动
+上面代码的run函数，就是一个Generator函数的自动执行器。内部next函数就是Thunk的回调函数。next函数先将指针移到Generator函数的下一步（gen.next方法），然后判断Generator函数是否接受（result.done），如果没结束，就将next函数再传入Thunk函数（result.value属性），否则就直接退出
+
+有了这个执行器，执行 Generator 函数方便多了。不管内部有多少个异步操作，直接把 Generator 函数传入run函数即可。当然，前提是每一个异步操作，都要是 Thunk 函数，也就是说，跟在yield命令后面的必须是 Thunk 函数。
+
+```
+var g = function* (){
+  var f1 = yield readFileThunk('fileA');
+  var f2 = yield readFileThunk('fileB');
+  // ...
+  var fn = yield readFileThunk('fileN');
+};
+
+run(g);
+```
+
+上面代码中，函数g封装了n个异步的读取文件操作，只要执行run函数，这些操作就会自动完成。这样一来，异步操作不仅可以写得像同步操作，而且一行代码就可以执行。
+
+Thunk 函数并不是 Generator 函数自动执行的唯一方案。因为自动执行的关键是，必须有一种机制，自动控制 Generator 函数的流程，接收和交还程序的执行权。回调函数可以做到这一点，Promise 对象也可以做到这一点。
+
+> co模块
+
+下面是一个 Generator 函数，用于依次读取两个文件。
+
+```
+var gen = function* (){
+  var f1 = yield readFile('/etc/fstab');
+  var f2 = yield readFile('/etc/shells');
+  console.log(f1.toString());
+  console.log(f2.toString());
+}
+```
+
+co 模块可以让你不用编写 Generator 函数的执行器。
+
+```
+var co = require('co');
+co(gen);
+```
+
+co函数返回一个Promise对象，因此可以用then方法添加回调函数。
+
+```
+co(gen).then(function() {
+  log('Generator 函数执行完成');
+});
+```
+
+上面代码中，等到 Generator 函数执行结束，就会输出一行提示。
+
+前面说过，Generator 就是一个异步操作的容器。它的自动执行需要一种机制，当异步操作有了结果，能够自动交回执行权。两种方法可以做到这一点
+
+1. 回调函数。将异步操作包装成 Thunk 函数，在回调函数里面交回执行权。
+2. Promise 对象。将异步操作包装成 Promise 对象，用then方法交回执行权。
+
+co 模块其实就是将两种自动执行器（Thunk 函数和 Promise 对象），包装成一个模块。使用 co 的前提条件是，Generator 函数的yield命令后面，只能是 Thunk 函数或 Promise 对象。如果数组或对象的成员，全部都是 Promise 对象，也可以使用 co
+
+还是沿用上面的例子，首先，把fs模块的readFile方法包装程一个Promise对象
+
+```
+var fs = require('fs');
+
+var readFile = function (fileName){
+  return new Promise(function (resolve, reject){
+    fs.readFile(fileName, function(error, data){
+      if (error) return reject(error);
+      resolve(data);
+    });
+  });
+};
+
+var gen = function* (){
+  var f1 = yield readFile('/etc/fstab');
+  var f2 = yield readFile('/etc/shells');
+  console.log(f1.toString());
+  console.log(f2.toString());
+};
+```
