@@ -1,0 +1,5 @@
+这个问题来源于前段时间用anglar2做项目时，使用http请求后端需要拿到其在header中设置的authentication。
+
+开始死活拿不到，用getAllResponseHeaders也只能返回Content-Type这一个字段值，这个时候使用postman请求发现所有数据确实是返回了的。
+
+最后终于找出是因为跨域的问题， 我以为我用chrome的access-control-allow-origin插件不会有跨域的问题，没想到这就是个坑，然后不用这个插件把前后端跨域问题解决下就能取到了
