@@ -11,3 +11,17 @@ function fakeJoin(arr, connector) {
   }
   return str;
 }
+// Array.from
+const toArrayFrom = (() =>
+  Array.from ? Array.from : obj => [].slice.call()
+)
+// Array.of
+function ArrayOf(){
+  return [].slice.call(arguments);
+}
+// Array.prototype.includes()
+const contains = (() =>
+  Array.prototype.includes
+    ? (arr, value) => arr.includes(value)
+    : (arr, value) => arr.some(el => el === value)
+)();
