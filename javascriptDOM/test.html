@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>File(s) size</title>
+
+</head>
+
+<body>
+<div id="x">
+  abc
+</div>
+<div id = "x">
+  123
+</div>
+<script>
+  window.onload = function() {
+    console.log(document.nodeType);
+    console.log(HTMLDocument.nodeType);
+    console.log(Element.nodeType);
+    console.log(HTMLElement.childNodes);
+    // x = 15;
+    console.log(document.querySelectorAll("#x")[1].style.color = 'blue');
+  }
+</script>
+</body>
+</html>
