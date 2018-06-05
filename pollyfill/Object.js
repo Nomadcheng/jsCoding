@@ -86,7 +86,7 @@ Object.defineProperty(Object, 'is', {
   value: function(x, y) {
     if (x === y) {
       // 针对+0不等于-0的情况
-      return x !== 0 || 1 / x === 1 / y
+      return x !== 0 || 1 / x === 1 / y;
     }
     // 针对NaN的情况
     return x !== x && y !== y;
@@ -113,13 +113,27 @@ const shallowClone = (obj) => Object.create(
   {},
   Object.getOwnPropertyDescriptors(obj)
 );
- { foo:
-    { value: 123,
-      writable: true,
-      enumerable: true,
-      configurable: true },
-   bar:
-    { get: [Function: get bar],
-      set: undefined,
-      enumerable: true,
-      configurable: true } }
+
+/*
+** 一个用以定义简单类的函数
+** 第一步，先定义一个构造函数，并设置初始化新对象的实例属性
+** 第二步，给构造函数的prototype对象定义实例的方法
+** 第三步，给构造函数定义类字段和类属性
+*/
+function defineClass(constructor,   //用以设置实例的属性的函数
+                     methods,       //实例的方法，复制到原型中
+                     statics)       //类属性，复制到构造函数中
+{
+  if(methods) Object.create(constructor.prototype, methods);
+  if(statics) Object.create(constructor, statics);
+  return constructor;
+}
+// 这时Range类的另一个实现
+var SimpleRange = defineClass(
+  function(f,t) {this.f = f; this.t = t;},
+  {
+    includes(x){ return this.f <= x && x <= this.t;},
+    toString() { return this.f + "..." + this.t}
+  },
+  {upto: function(t) {return new SimpleRange(o, t); }}
+);

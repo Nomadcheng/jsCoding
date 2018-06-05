@@ -29,3 +29,13 @@ function isNegZero(n) {
   n = Number(n);
   return (n === 0) && (1 / n === -Infinity);
 }
+//
+Number.prototype.times = function(f, context) {
+  console.log(this);
+  console.log(f);
+  console.log(context);
+  var n = Number(this);
+  for(var i = 0; i < n; i++) {
+    f.call(context, i);
+  }
+}
