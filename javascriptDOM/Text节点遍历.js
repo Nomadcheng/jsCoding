@@ -45,7 +45,7 @@ function makeSortable(table) {
       // 嵌套函数来创建本地作用域
       headers[i].onclick = function() {
         sortrows(table, n);
-      }
+      };
     }(i)); //将i赋值给局部变量n
   }
 }

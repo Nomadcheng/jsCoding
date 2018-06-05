@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style media="screen">
+      .block1 {
+        position: absolute;
+        left: 100px;
+        top: 100px;
+        width: 250px;
+        background-color: white;
+        border: solid black;
+      }
+      .block2 {
+        background-color: gray;
+        border-bottom: dotted black;
+        padding: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="block1">
+      <div class="block2" onmousedown="drag(this.parentNode, event);">拖动我</div>
+      <p>这是一个测试</p>
+      <p>这是一个测试</p>
+      <p>这是一个测试</p>
+    </div>
+
+    <script type="text/javascript" src="scrollAndViewPort.js"></script>
+    <script type="text/javascript" src="moveElement.js"></script>
+  </body>
+</html>
