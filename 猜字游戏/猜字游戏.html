@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>I'm thinking of a number</title>
+    <script type="text/javascript" src="router.js"></script>
+    <style media="screen">
+      #prompt { font-size: 16pt; }
+      table { width: 90%; margin:10px; margin-left:5%; }
+      #low, #high { background-color: lightgray; height: 1em; }
+      #mid { background-color: green; }
+    </style>
+  </head>
+  <body>
+    <h1 id="heading">I'm thinking of a number...</h1>
+    <table>
+      <tr>
+        <td id="low"></td>
+        <td id="mid"></td>
+        <td id="high"></td>
+      </tr>
+    </table>
+    <label id="prompt"></label>
+    <input type="text" id="input">
+  </body>
+</html>
