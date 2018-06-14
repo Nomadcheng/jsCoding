@@ -78,4 +78,19 @@
       }
 
   }, false);
+
+
+  var o = {
+    a: 'h1',
+    m: function() {
+      var self = this;
+      console.log(this.a);
+    },
+    h: {
+      a: 'h2',
+      fun2: function() {
+        console.log(this.a);
+      }
+    }
+  }
 </script>
