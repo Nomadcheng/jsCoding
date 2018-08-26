@@ -4,6 +4,7 @@ function SuperType(){
 
 function SubType(){
   //继承了SuperType
+  // 因为SuperType.prototype.constructor === 因为SuperType
   SuperType.call(this);
 }
 
