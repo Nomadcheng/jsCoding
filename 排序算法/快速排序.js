@@ -1,90 +1,29 @@
-function quickSort(arr, left, right) {
-  var len = arr.length,
-      partitionIndex,
-      left = type left != 'number' ? 0 : left,
-      right = type right != 'number' ? 0 : reght;
-
-  if (left < right) {
-    partitionIndex = partition(arr, left, right);
-    quickSort(arr, left, partitionIndex-1);
-    quickSort(arr, partitionIndex+1, right);
+function quick_sort(arr) {
+  if (arr.length < 2) return arr;
+  _quickSort(arr, 0, arr.length - 1)
+  return arr
+}
+function swap(arr, a, b) {
+  let temp = arr[a]
+  arr[a] = arr[b]
+  arr[b] = temp
+}
+function partition(arr, start, end) {
+  let pivot = end
+  let j = start - 1
+  for(let i = start; i < end; i++) {
+      if(arr[i] < arr[pivot]) {
+          j++
+          swap(arr, i, j)
+      }
   }
+  swap(arr, j + 1, pivot)
+  return j + 1
 }
-
-function partition(arr, left ,right) {     // 分区操作
-    var pivot = left,                      // 设定基准值（pivot）
-        index = pivot + 1;
-    for (var i = index; i <= right; i++) {
-        if (arr[i] < arr[pivot]) {
-            swap(arr, i, index);
-            index++;
-        }
-    }
-    swap(arr, pivot, index - 1);
-    return index-1;
+function _quickSort(arr, start, end) {
+  if(start > end) return 
+  let pos = partition(arr, start, end)
+  _quickSort(arr, start, pos - 1)
+  _quickSort(arr, pos + 1, end)
 }
-
-function swap(arr, i, j) {
-    var temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
-}
-```
-
-## 堆排序
-
-堆排序（Heapsort）是指利用堆这种数据结构所设计的一种排序算法。堆积是一个近似完全二叉树的结构，并同时满足堆积的性质：即子结点的键值或索引总是小于（或者大于）它的父节点。堆排序可以说是一种利用堆的概念来排序的选择排序。分为两种方法：大顶堆跟小顶堆。
-
-堆排序的平均时间复杂度为O(nlogn)
-
-算法步骤
-
-1. 创建一个堆H[0...n-1]；
-2. 把堆首（最大值）和堆尾互换
-3. 把堆的尺寸缩小1，并调用shift_down(0),目的是把新的数组顶端数据调整到相应位置
-4. 重复步骤2，直到堆的尺寸为1
-
-```
-var len;    // 因为声明的多个函数都需要数据长度，所以把len设置成为全局变量
-function buildMaxHeap(arr) {//建立大顶堆
-  len = arr.length;
-  for (var i = Math.floor(len/2); i >= 0; i--) {
-    heapify(arr, i);
-  }
-}
-
-function heapify(arr, i) {//堆调整
-  var left = 2 * i + 1,
-      right = 2 * i + 2,
-      largest = i;
-
-  if(left < len && arr[left] > arr[largest]) {
-    largest = left;
-  }
-
-  if(right < len && arr[right] > arr[largest]) {
-    largest = right;
-  }
-
-  if(largest != i) {
-    swap(arr, i, largest);
-    heapify(arr, largest);
-  }
-}
-
-function swap(arr, i, j) {
-  var temp = arr[i];
-  arr[i] = arr[j];
-  arr[j] = temp;
-}
-
-function heapSort(arr) {
-  buildMaxHeap(arr);
-
-  for(var i = arr.length-1; i > 0; i--) {
-    swap(arr, 0, i);
-    len--;
-    heapify(arr,0)
-  }
-  return arr;
-}
+quick_sort([325,235,35,23,623,123,62,6,23,23,12])
